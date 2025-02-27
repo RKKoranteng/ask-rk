@@ -90,4 +90,19 @@ body a {
 body a:hover {
     color: rgb(180, 180, 180);
     text-decoration: underline;
-}        
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    footer {
+        font-size: 12px; /* Smaller font size for tablets and smaller screens */
+        padding: 8px 0; /* Reduce padding */
+    }
+}
+
+@media (max-width: 480px) {
+    footer {
+        font-size: 10px; /* Even smaller font size for mobile devices */
+        padding: 6px 0; /* Further reduce padding */
+    }
+}

@@ -30,7 +30,7 @@ app.post('/generate-questions', async (req, res) => {
                         content: `Give interview questions for the following job description. Job description: ${jobDescription}`,
                     },
                 ],
-                max_tokens: 200,
+                max_tokens: 8192,
             },
             {
                 headers: {

@@ -4,3 +4,4 @@
 # inore node.js modules and spec files
 node_modules/*
 package-lock.json
+package.json

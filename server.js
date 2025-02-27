@@ -1,16 +1,15 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const path = require('path'); // Add this line
 const app = express();
 require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
 
-// Root route
-app.get('/', (req, res) => {
-    res.send('Welcome to the AI Interview Question Generator API! Use the /generate-questions endpoint.');
-});
+// Serve static files (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Generate questions route
 app.post('/generate-questions', async (req, res) => {
@@ -28,7 +27,7 @@ app.post('/generate-questions', async (req, res) => {
                 messages: [
                     {
                         role: "user",
-                        content: `Generate specific interview questions for the following job description. Only provide the questions, no explanations, reasoning, or additional text. Format the questions as a numbered list. Job description: ${jobDescription}`,
+                        content: `Generate 5 specific interview questions for the following job description. Only provide the questions, no explanations, reasoning, or additional text. Format the questions as a numbered list. Job description: ${jobDescription}`,
                     },
                 ],
                 max_tokens: 200,

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ask-rk | AI Interview Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            padding-bottom: 50px; /* Add space at the bottom for footer */
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 80%;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+        button {
+            margin: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #clearBtn {
+            background-color: #f44336; /* Red for Clear button */
+        }
+        #clearBtn:hover {
+            background-color: #e53935;
+        }
+        #output {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+            width: 80%;
+            max-width: 700px;
+            margin-top: 20px;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        .loading {
+            display: none; /* Hidden by default */
+            font-size: 18px;
+            color: #4CAF50;
+            margin-top: 20px;
+        }
+        footer a:link {
+            color: white;
+            text-decoration: underline;
+        }
+        footer a:visited {
+            color: white;
+        }
+        footer a:hover {
+            color: rgb(180, 180, 180);
+        }
+        footer a:active {
+          color: white;
+        }
+        p.changelog {
+            position: absolute;
+            top: 10px;
+            padding-bottom: 10%;
+            right: 10px;
+            width: 100px; /* Adjust size as needed */
+            height: auto;
+        }
+        body a {
+            color: black;
+            text-decoration: none;
+        }
+        body a:hover {
+            color: black;
+            text-decoration: underline;
+        }        
+        
+
+
+    </style>
+</head>
+<body>
+    <p class="changelog"><a href="CHANGELOG.md" target="_blank">version 0.1.1</a></p>
+    <h2>ask-rk</h2>
+    <h4>AI Interview Question Generator</h4>
+    <textarea id="jobDescription" placeholder="Enter job description..."></textarea><br>
+    <div class="buttons">
+        <button onclick="generateQuestions()">Generate Questions</button>
+        <button id="clearBtn" onclick="clearInput()">Clear</button>
+    </div>
+    <div class="loading" id="loading">Generating questions... Please wait.</div>
+    <div id="output"></div>
+
+    <script>
+        async function generateQuestions() {
+            const jobDescription = document.getElementById('jobDescription').value;
+            const generateBtn = document.querySelector('button[onclick="generateQuestions()"]');
+            const loadingDiv = document.getElementById('loading');
+            const outputDiv = document.getElementById('output');
+        
+            if (!jobDescription) {
+                alert("Please enter a job description!");
+                return;
+            }
+        
+            // Disable the button and show loading message
+            generateBtn.disabled = true;
+            generateBtn.textContent = "Generating...";
+            loadingDiv.style.display = "block";
+            outputDiv.innerHTML = ""; // Clear previous output
+        
+            try {
+                // Send the job description to the backend
+                const response = await fetch('http://localhost:3000/generate-questions', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ jobDescription }),
+                });
+            
+                if (!response.ok) {
+                    throw new Error("Failed to fetch questions");
+                }
+            
+                // Get the response from the backend
+                const data = await response.json();
+                console.log("Backend Response:", data); // Log the backend response
+            
+                // Display the generated questions
+                if (data.questions && data.questions.trim()) {
+                    const questions = data.questions.trim().split("\n").map(q => `<p>${q}</p>`).join('');
+                    outputDiv.innerHTML = '<h3>Interview Questions:</h3>' + questions; 
+                } else {
+                    outputDiv.innerHTML = "<p>No questions generated. Please try again with a different job description.</p>";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again later.");
+            } finally {
+                // Re-enable the button and hide loading message
+                generateBtn.disabled = false;
+                generateBtn.textContent = "Generate Questions";
+                loadingDiv.style.display = "none";
+            }
+        }
+
+        // Clear function to clear the input and output
+        function clearInput() {
+            document.getElementById('jobDescription').value = '';
+            document.getElementById('output').innerHTML = '';
+        }
+    </script>
+
+    <footer>
+        This project is <a href="https://choosealicense.com/licenses/mit/">MIT Licensed</a>. Created & maintained by <a href="https://rkkoranteng.com">Richard Koranteng</a> 
+    </footer>
+</body>
+</html>

@@ -1,15 +1,17 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const path = require('path'); // Add this line
 const app = express();
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config();
 
 app.use(express.json());
-app.use(cors()); // Enable CORS for frontend-backend communication
+app.use(cors());
 
-// Replace with your OpenRouter API key in a .env file
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+// Serve static files (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Generate questions route
 app.post('/generate-questions', async (req, res) => {
     const { jobDescription } = req.body;
 
@@ -18,7 +20,6 @@ app.post('/generate-questions', async (req, res) => {
     }
 
     try {
-        // Send the job description to OpenRouter API
         const response = await axios.post(
             'https://openrouter.ai/api/v1/chat/completions',
             {
@@ -26,26 +27,19 @@ app.post('/generate-questions', async (req, res) => {
                 messages: [
                     {
                         role: "user",
-                        content: `Give interview questions for the following job description. Job description: ${jobDescription}`,
+                        content: `Generate 5 specific interview questions for the following job description. Only provide the questions, no explanations, reasoning, or additional text. Format the questions as a numbered list. Job description: ${jobDescription}`,
                     },
                 ],
-                max_tokens: 8192,
+                max_tokens: 200,
             },
             {
                 headers: {
-                    Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+                    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
                 },
             }
         );
 
-        // Log the full response for debugging
-        console.log("OpenRouter Full Response:", JSON.stringify(response.data, null, 2));
-
-        // Extract the generated questions
         const questions = response.data.choices[0].message.content;
-        console.log("Generated Questions:", questions);
-
-        // Send the questions back to the frontend
         res.json({ questions });
     } catch (error) {
         console.error("OpenRouter API Error:", error.response?.data || error.message);

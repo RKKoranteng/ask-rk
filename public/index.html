@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ask-rk | AI Interview Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <p class="changelog"><a href="CHANGELOG.md" target="_blank">version 0.1.1</a></p>
+    <h2>ask-rk</h2>
+    <h4>AI Interview Question Generator</h4>
+    <textarea id="jobDescription" placeholder="Enter job description..."></textarea><br>
+    <div class="buttons">
+        <button onclick="generateQuestions()">Generate Questions</button>
+        <button id="clearBtn" onclick="clearInput()">Clear</button>
+    </div>
+    <div class="loading" id="loading">Generating questions... Please wait.</div>
+    <div id="output"></div>
+
+    <footer>
+        This project is <a href="https://choosealicense.com/licenses/mit/">MIT Licensed</a>. Created & maintained by <a href="https://rkkoranteng.com">Richard Koranteng</a> 
+    </footer>
+</body>
+</html>

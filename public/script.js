@@ -17,26 +17,26 @@ async function generateQuestions() {
 
     try {
         // Send the job description to the backend
-        const response = await fetch('http://localhost:1000/generate-questions', {
+        const response = await fetch('/generate-questions', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ jobDescription }),
         });
-    
+
         if (!response.ok) {
             throw new Error("Failed to fetch questions");
         }
-    
+
         // Get the response from the backend
         const data = await response.json();
         console.log("Backend Response:", data); // Log the backend response
-    
+
         // Display the generated questions
         if (data.questions && data.questions.trim()) {
             const questions = data.questions.trim().split("\n").map(q => `<p>${q}</p>`).join('');
-            outputDiv.innerHTML = '<h3>Interview Questions:</h3>' + questions; 
+            outputDiv.innerHTML = '<h3>Interview Questions:</h3>' + questions;
         } else {
             outputDiv.innerHTML = "<p>No questions generated. Please try again with a different job description.</p>";
         }

@@ -17,7 +17,7 @@ async function generateQuestions() {
 
     try {
         // Send the job description to the backend
-        const response = await fetch('http://localhost:3000/generate-questions', {
+        const response = await fetch('http://localhost:1000/generate-questions', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

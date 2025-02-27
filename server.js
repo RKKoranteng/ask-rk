@@ -27,7 +27,7 @@ app.post('/generate-questions', async (req, res) => {
                 messages: [
                     {
                         role: "user",
-                        content: `Generate 5 specific interview questions for the following job description. Only provide the questions, no explanations, reasoning, or additional text. Format the questions as a numbered list. Job description: ${jobDescription}`,
+                        content: `Give interview questions for the following job description. Job description: ${jobDescription}`,
                     },
                 ],
                 max_tokens: 200,

@@ -1,7 +1,7 @@
 # ignore OpenRouter API key
 .env
 
-# inore node.js modules and spec files
+# ignore node.js modules and spec files
 node_modules/*
 package-lock.json
 package.json
